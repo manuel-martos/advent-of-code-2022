@@ -3,7 +3,7 @@ fun main() {
     println("part02 -> ${solveDay04Part02()}")
 }
 
-fun solveDay04Part01() =
+private fun solveDay04Part01() =
     solver { range1, range2 ->
         if ((range1.contains(range2.first) && range1.contains(range2.last)) ||
             (range2.contains(range1.first) && range2.contains(range1.last))
@@ -14,7 +14,7 @@ fun solveDay04Part01() =
         }
     }
 
-fun solveDay04Part02() =
+private fun solveDay04Part02() =
     solver { range1, range2 ->
         if (range1.contains(range2.first) ||
             range1.contains(range2.last) ||
@@ -27,7 +27,7 @@ fun solveDay04Part02() =
         }
     }
 
-fun solver(reducer: (IntRange, IntRange) -> Int) =
+private fun solver(reducer: (IntRange, IntRange) -> Int) =
     readInput("day04")
         .map { it.split(",", "-") }
         .sumOf {
