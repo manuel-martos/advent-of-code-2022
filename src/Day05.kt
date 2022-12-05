@@ -5,27 +5,18 @@ fun main() {
     println("part02 -> ${solveDay05Part02()}")
 }
 
-private fun solveDay05Part01(): String {
-    val input = readInput("day05")
-    val index = input.indexOf("")
-    val stacks = input.subList(0, index)
-    val movements = input.subList(index + 1, input.size)
-    val parsedStacks = parseStacks(stacks)
-    val parsedMovements = parseMovements(movements)
-    applyMovements(parsedStacks, parsedMovements)
-    return parsedStacks.keys.sorted().joinToString(separator = "") {
-        parsedStacks[it]!!.first().toString()
-    }
-}
+private fun solveDay05Part01(): String = solver(::applyMovements)
 
-private fun solveDay05Part02(): String {
+private fun solveDay05Part02(): String = solver(::applyMultipleMovements)
+
+private fun solver(block: (Map<Int, LinkedList<Char>>, List<Triple<Int, Int, Int>>) -> Unit): String {
     val input = readInput("day05")
     val index = input.indexOf("")
     val stacks = input.subList(0, index)
     val movements = input.subList(index + 1, input.size)
     val parsedStacks = parseStacks(stacks)
     val parsedMovements = parseMovements(movements)
-    applyMultipleMovements(parsedStacks, parsedMovements)
+    block(parsedStacks, parsedMovements)
     return parsedStacks.keys.sorted().joinToString(separator = "") {
         parsedStacks[it]!!.first().toString()
     }
@@ -35,7 +26,13 @@ private fun parseStacks(stackConfig: List<String>): Map<Int, LinkedList<Char>> {
     val stackIds = stackConfig
         .last()
         .split(" ")
-        .map { try { it.toInt() } catch (e: Throwable) { "" } }
+        .map {
+            try {
+                it.toInt()
+            } catch (e: Throwable) {
+                ""
+            }
+        }
         .filterIsInstance<Int>()
 
     val result = stackIds.associateWith { LinkedList<Char>() }
@@ -57,8 +54,7 @@ private fun parseMovements(movements: List<String>): List<Triple<Int, Int, Int>>
     val regex = """move (\d+) from (\d+) to (\d+)""".toRegex()
     return movements
         .map {
-            val groups = regex.find(it)?.groupValues ?:
-            error("Nope")
+            val groups = regex.find(it)?.groupValues ?: error("Nope")
             groups.subList(1, groups.size).map(String::toInt)
         }
         .map { Triple(it[0], it[1], it[2]) }
