@@ -18,7 +18,7 @@ private fun parser(): List<Int> {
         if (it.isEmpty()) {
             result.add(0)
         } else {
-            result.set(result.size - 1, result.last() + it.toInt())
+            result[result.size - 1] = result.last() + it.toInt()
         }
     }
     return result
